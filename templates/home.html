@@ -1,0 +1,16 @@
+<div class="row">
+  <div ng-class='col-md-12'>
+    <div class="container-fluid">
+        <h2>uTorrent client in angular</h2>
+      
+
+        <button ng-click="Scan()">Scan for a listening torrent client</button>
+		<button ng-click="Pair()" ng-if="!authToken">Pair on found torrent client</button>
+		<button ng-click="Connect()" ng-if="authToken">Connect to uTorrent with auth token: {{authToken}}</button>
+
+        <ul class="status">
+          <li ng-repeat="status in statusLog">{{status}}</li>
+        </ul>
+    </div>
+  </div>
+</div>
