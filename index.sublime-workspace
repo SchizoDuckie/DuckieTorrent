@@ -1,1 +1,607 @@
-{}
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"wATCHlIST",
+				"WatchlistService"
+			],
+			[
+				"watchlisti",
+				"watchlistitem"
+			],
+			[
+				"sear",
+				"searchTPB"
+			],
+			[
+				"tvrage",
+				"TVRage"
+			],
+			[
+				"resolve",
+				"resolveTVRageIDAndMatch"
+			],
+			[
+				"ftech",
+				"fetchTvRage"
+			],
+			[
+				"wta",
+				"WatchlistItem"
+			],
+			[
+				"calendar",
+				"calendarEvents"
+			],
+			[
+				"events",
+				"events"
+			],
+			[
+				"Ca",
+				"CalendarEvents"
+			],
+			[
+				"calend",
+				"CalendarEvents"
+			],
+			[
+				"calendarEven",
+				"CalendarEventsProvider"
+			],
+			[
+				"episode",
+				"episodeIDs"
+			],
+			[
+				"topS",
+				"topSitesLoading"
+			],
+			[
+				"The",
+				"ThePirateBay"
+			],
+			[
+				"recursi",
+				"recursiveBuildQuery"
+			],
+			[
+				"recuriv",
+				"recursiveBuildQuery"
+			],
+			[
+				"p",
+				"primary"
+			],
+			[
+				"fixtu",
+				"fixturesQueue"
+			],
+			[
+				"I",
+				"IndexedDBAdapter"
+			],
+			[
+				"ENT",
+				"EntityManager"
+			],
+			[
+				"enti",
+				"Entity"
+			],
+			[
+				"entity",
+				"entityPrototypeMethods"
+			],
+			[
+				"Entit",
+				"entityPrototypeMethods"
+			],
+			[
+				"Entity",
+				"EntityManager"
+			],
+			[
+				"ID_",
+				"ID_PDFTemplate_Revision"
+			],
+			[
+				"data-",
+				"data-inline-edit-action"
+			],
+			[
+				"PDFTemplate",
+				"PDFTemplateRevision"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"pi",
+				"Package Control: Install Package"
+			],
+			[
+				"pd",
+				"Package Control: Discover Packages"
+			],
+			[
+				"packag",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 472.0
+	},
+	"console":
+	{
+		"height": 409.0,
+		"history":
+		[
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/wamp/www/duckietorrent/index.html",
+		"/C/wamp/www/duckietorrent/templates/home.html",
+		"/C/wamp/www/duckietv/js/app.js",
+		"/C/Users/SchizoDuckie/Downloads/JitBit.Macro.Recorder.v5.6.5.0.Keymaker-RNDD/key.txt",
+		"/C/wamp/www/duckietv/templates/serie.html",
+		"/C/wamp/www/duckietv/js/controllers.js",
+		"/C/wamp/www/duckietv/tab.html",
+		"/C/wamp/www/duckietv/js/duckietv.utorrent.js",
+		"/C/wamp/www/visualizer/javascripts/btapp/plugin.btapp.js",
+		"/C/wamp/www/duckietorrent/js/controllers.js",
+		"/C/wamp/www/duckietv/deploy-both.mcr",
+		"/C/wamp/www/duckietv/deploy-browseraction.mcr",
+		"/C/wamp/www/duckietv/deploy-newtab.mcr",
+		"/C/wamp/www/duckietv/README.md",
+		"/C/wamp/www/duckietv/deploy.php",
+		"/C/wamp/www/duckietv/js/duckietv.trakttv.js",
+		"/C/wamp/www/btappjs.com/assets/js/visualizer.js",
+		"/C/wamp/www/btappjs.com/index.html",
+		"/C/wamp/www/btappjs.com/assets/js/application.js",
+		"/C/wamp/www/btappjs.com/visualizer.html",
+		"/C/wamp/www/visualizer/javascripts/btapp/client.btapp.js",
+		"/C/wamp/www/visualizer/index.html",
+		"/C/wamp/www/visualizer/javascripts/index.js",
+		"/C/wamp/www/visualizer/javascripts/btapp/btapp.js",
+		"/C/wamp/www/duckietorrent.",
+		"/C/wamp/www/duckietorrent/js/app.js",
+		"/C/wamp/www/duckietv/js/directives.js",
+		"/C/wamp/www/seriesguide2/css/main.css",
+		"/C/wamp/www/seriesguide2/tab.html",
+		"/C/wamp/www/seriesguide2/js/duckietv.thetvdb.js",
+		"/C/wamp/www/seriesguide2/js/directives.js",
+		"/C/wamp/www/seriesguide2/templates/serie.html",
+		"/C/wamp/www/seriesguide2/templates/episode.html",
+		"/C/wamp/www/seriesguide2/templates/serieDetails.html",
+		"/C/wamp/www/seriesguide2/changelog.php",
+		"/C/wamp/www/seriesguide2/js/duckietv.tvrage.js",
+		"/C/wamp/www/seriesguide2/js/services.js",
+		"/C/wamp/www/seriesguide2/templates/settings.html",
+		"/C/wamp/www/seriesguide2/js/duckietv.tvrage.sync.js",
+		"/C/wamp/www/seriesguide2/js/app.js",
+		"/C/wamp/www/seriesguide2/deploy.php",
+		"/C/wamp/www/seriesguide2/README.md",
+		"/C/wamp/www/seriesguide2/deploy-browseraction.mcr",
+		"/C/wamp/www/seriesguide2/js/duckietv.storagesync.js",
+		"/C/wamp/www/seriesguide2/js/controllers.js",
+		"/C/wamp/www/seriesguide2/VERSION",
+		"/C/wamp/www/seriesguide2/js/lazy-background.js",
+		"/C/wamp/www/seriesguide2/templates/serieHeader.html",
+		"/C/wamp/www/seriesguide2/js/vendor/chart.min.js",
+		"/C/wamp/www/seriesguide2/js/vendor/tcchart.js",
+		"/C/wamp/www/seriesguide2/js/duckietv.kickasstorrents.js",
+		"/C/wamp/www/seriesguide2-app/css/main.css",
+		"/C/wamp/www/seriesguide2/js/duckietv.calendar.js",
+		"/C/wamp/www/seriesguide2/js/duckietv.torrentfreak.js",
+		"/C/wamp/www/seriesguide2/js/seriesguide.kickasstorrents.js",
+		"/C/wamp/www/seriesguide2/js/duckietv.scenenames.js",
+		"/C/wamp/www/seriesguide2/js/CRUD.entities.js",
+		"/C/wamp/www/seriesguide2/templates/home.html",
+		"/C/wamp/www/index.html",
+		"/C/wamp/www/seriesguide2/manifest-app.json",
+		"/C/wamp/www/seriesguide2/manifest.json",
+		"/C/wamp/www/seriesguide2/js/seriesguide.calendar.js",
+		"/C/wamp/www/seriesguide2/.git/config",
+		"/C/wamp/www/seriesguide2/js/duckietv.googleimages.js",
+		"/C/wamp/www/seriesguide2/js/duckietv.imdb.js",
+		"/C/wamp/www/seriesguide2/js/duckietv.thepiratebay.js",
+		"/C/wamp/www/seriesguide2/exclude.txt",
+		"/C/wamp/www/seriesguide2/js/chrome.topsites.js",
+		"/C/wamp/www/seriesguide2/js/seriesguide.mirrorresolver.js",
+		"/C/wamp/www/seriesguide2/js/duckietv.mirrorresolver.js",
+		"/C/wamp/www/seriesguide2/js/notification.js",
+		"/C/wamp/www/seriesguide2/templates/typeAheadTPB.html",
+		"/C/wamp/www/seriesguide2/templates/typeAheadKickass.html",
+		"/C/wamp/www/seriesguide2/js/seriesguide.thepiratebay.js",
+		"/C/wamp/www/deploy/browseraction/mainfest.json",
+		"/C/wamp/www/seriesguide2/deploy.bat",
+		"/C/wamp/www/seriesguide2-app/js/app.js",
+		"/C/wamp/www/seriesguide2/templates/datepicker.html",
+		"/C/wamp/www/seriesguide2/js/seriesguide.torrentfreak.js",
+		"/C/wamp/www/seriesguide2/templates/torrentFreakTop10.html",
+		"/C/wamp/www/seriesguide2/js/seriesguide.scenenames.js",
+		"/C/wamp/www/seriesguide2/js/seriesguide.tvrage.sync.js",
+		"/C/wamp/www/seriesguide2/js/seriesguide.thetvdb.js",
+		"/C/wamp/www/seriesguide2-app/tab.html",
+		"/C/wamp/www/seriesguide2/js/seriesguide.imdb.js",
+		"/C/wamp/www/seriesguide2/templates/typeAheadIMDB.html",
+		"/C/wamp/www/seriesguide2/templates/event.html",
+		"/C/wamp/www/seriesguide2-app/manifest.json",
+		"/C/Windows/System32/drivers/etc/hosts",
+		"/C/wamp/www/seriesguide2/js/vendor/datePicker.js",
+		"/C/wamp/www/seriesguide2/templates/watchlist.html",
+		"/C/wamp/www/seriesguide2/js/seriesguide.googleimages.js",
+		"/C/wamp/www/seriesguide2/js/vendor/CRUD.SqliteAdapter.js",
+		"/C/wamp/www/seriesguide2/js/vendor/CRUD.js",
+		"/C/wamp/www/seriesguide2/css/anim.css",
+		"/C/wamp/www/seriesguide2/js/vendor/tmhDynamicLocale.js",
+		"/C/Users/SchizoDuckie/AppData/Local/Temp/_tc/manifest.json",
+		"/C/wamp/www/seriesguide2-app/css/colorpicker.css",
+		"/C/wamp/www/seriesguide2-app/templates/watchlist.html",
+		"/C/wamp/www/seriesguide2-app/templates/torrentFreakTop10.html",
+		"/C/wamp/www/seriesguide2-app/js/seriesguide.torrentfreak.js",
+		"/C/wamp/www/seriesguide2-app/templates/settings.html",
+		"/C/wamp/www/seriesguide2-app/templates/home.html",
+		"/C/wamp/www/seriesguide2/js/seriesguide.tvrage.js",
+		"/C/wamp/www/seriesguide2-app/js/vendor/CRUD.SqliteAdapter.js",
+		"/C/wamp/www/seriesguide2-app/js/vendor/CRUD.js",
+		"/C/wamp/www/seriesguide2-app/js/services.js",
+		"/C/wamp/www/seriesguide2-app/js/seriesguide.thetvdb.js",
+		"/C/wamp/www/seriesguide2-app/js/seriesguide.tvrage.sync.js",
+		"/C/wamp/www/seriesguide2-app/js/seriesguide.tvrage.js",
+		"/C/wamp/www/seriesguide2-app/js/controllers.js",
+		"/C/wamp/www/seriesguide2-app/templates/serie.html",
+		"/C/wamp/www/seriesguide2-app/js/seriesguide.tvrage.matcher.js",
+		"/C/wamp/www/seriesguide2/js/vendor/angular.min.js",
+		"/C/wamp/www/seriesguide2/js/vendor/angular-animate.js",
+		"/C/wamp/www/seriesguide2-app/js/background.js",
+		"/C/wamp/www/seriesguide2-app/js/seriesguide.kickasstorrents.js",
+		"/C/wamp/www/seriesguide2-app/templates/typeAheadKickass.html",
+		"/C/wamp/www/seriesguide2-app/launch.js",
+		"/C/wamp/www/seriesguide2-app/README.md",
+		"/C/wamp/www/seriesguide2-app/js/directives.js",
+		"/C/wamp/www/seriesguide-chrome/manifest.json",
+		"/C/wamp/www/seriesguide2/updates.xml",
+		"/C/wamp/www/seriesguide-chrome/js/controllers.js",
+		"/C/wamp/www/angular-datepicker/app/templates/datepicker.html",
+		"/C/wamp/www/angular-datepicker/app/templates/event.html",
+		"/C/wamp/www/angular-datepicker/app/scripts/datePicker.js",
+		"/C/wamp/www/angular-datepicker2/app/scripts/calendar.js"
+	],
+	"find":
+	{
+		"height": 26.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"<open folders>"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"AJAX_TIMEOUT",
+			"ajax",
+			"pairing",
+			"pair",
+			"port",
+			"connect",
+			"utorrent",
+			"product",
+			"connect_to_authenticated_port",
+			"utorrent",
+			".start()",
+			"isstarted",
+			".start()",
+			"scope.",
+			"tvragesyn",
+			"getepisodenumber",
+			"diges",
+			".serieheader",
+			"serieheader",
+			"serieheader h3",
+			"settings",
+			"settings	",
+			"findseries",
+			"findSeriesID",
+			"parseSeries",
+			"tvrage",
+			".series",
+			"poster",
+			"mode=poster",
+			"updateable",
+			"SeriesGuide",
+			"seriesguide",
+			"serieheader",
+			"nth-child",
+			"chrome",
+			"settingsser",
+			"style",
+			"searchTPB",
+			"searchTpb",
+			"$set",
+			"torrentSearch.provider",
+			"ng-if",
+			"body",
+			"notify",
+			"settings.t",
+			"intelligence",
+			":",
+			"&",
+			"\\(([12][09][0-9]{2})\\)",
+			"\\((201[0-9])\\)",
+			"(201[0-9])",
+			"\\(201[0-9]\\)",
+			"\\'",
+			" (US)",
+			"',",
+			"scope.now =",
+			"digest",
+			"match",
+			"search",
+			"getvisibleweeks",
+			"getdays",
+			"step",
+			"getdaysofweek",
+			"weekdays",
+			"watchlist",
+			"start",
+			"nth-ch",
+			"WATCHLISTSERVIC",
+			"debugger",
+			"Serie",
+			"Favorite",
+			"Favorites",
+			"tr:hover",
+			"2px",
+			".day",
+			"padding-top",
+			".day",
+			"td.day",
+			".day",
+			"td span",
+			"dropdown",
+			"a",
+			"input",
+			"input:",
+			"find",
+			".innerText",
+			"querySelector",
+			">",
+			"h2",
+			"bust",
+			"boom",
+			"bust",
+			"dropdown",
+			"ul",
+			"dropdown-menu",
+			"dropdown",
+			"tvrage",
+			"draw",
+			"the men of the north",
+			"santa chum",
+			"2011-04-11",
+			"draw",
+			"2011-01-2",
+			"2011-11-28",
+			"hot & colt",
+			"cobras",
+			"sharks",
+			"brothels",
+			"santa chum",
+			"2012-11-05",
+			"2011-03-21",
+			"2013-10-10",
+			"greatness",
+			"2013-10-31",
+			"{\"season\":\"01\",\"episode\":",
+			"2009-07-19",
+			"00",
+			"boom",
+			"chum of all",
+			"draw",
+			"colt",
+			"cobra",
+			"ThePirateBay",
+			"thepiratebay",
+			"TPB",
+			"date",
+			"weeks",
+			"month"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"DuckieTV",
+			"duckietv",
+			"searchTorrents",
+			"searchMagnet",
+			"torrenting.searchprovider",
+			"ng-show",
+			"",
+			"and",
+			"'",
+			"",
+			"WatchListItem",
+			"watchlist",
+			"getElementsByTagName",
+			"",
+			"find",
+			"KickassTorrents",
+			"kickasstorrents",
+			"Kickass",
+			"notification",
+			"SeriesGuide",
+			"CRUD.Database.SQLBuilder",
+			"SQLBuilder",
+			"Indexeddb",
+			"CRUD.log",
+			"Content",
+			"thisPrimary",
+			"thisTable",
+			"entity",
+			"this.entity",
+			"Persist",
+			"this.origin.className]",
+			".",
+			"CRUD.EntityManager.entities[this.origin]....",
+			"_isDirty",
+			"values",
+			"fail",
+			"persisted",
+			"Persist",
+			"TimeTrack",
+			"img/",
+			"Document",
+			"",
+			"$revision",
+			"</td></tr>",
+			"</th><td>",
+			"<tr><th>",
+			"./js/vendor/pdfjs/"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "index.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"routing.",
+				"app\\config\\routing.yml"
+			],
+			[
+				"config.ym",
+				"app\\config\\config.yml"
+			],
+			[
+				"appk",
+				"app\\AppKernel.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 251.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

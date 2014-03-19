@@ -7,9 +7,16 @@
         <button ng-click="Scan()">Scan for a listening torrent client</button>
 		<button ng-click="Pair()" ng-if="!authToken">Pair on found torrent client</button>
 		<button ng-click="Connect()" ng-if="authToken">Connect to uTorrent with auth token: {{authToken}}</button>
+     <button ng-click="Update()" ng-if="session">Fetch RPC methods</button>
 
         <ul class="status">
           <li ng-repeat="status in statusLog">{{status}}</li>
+        </ul>
+
+        <ul class="rpcMethod">
+          <li ng-repeat="method in rpc">
+          <pre>{{method|json}}</pre>
+          </li>
         </ul>
     </div>
   </div>
