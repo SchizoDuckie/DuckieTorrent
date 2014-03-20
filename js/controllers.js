@@ -11,6 +11,7 @@ angular.module('DuckieTV.controllers',['DuckieTV.utorrent'])
      $scope.session = false;
      $scope.authToken = localStorage.getItem('utorrent.token')
      $scope.rpc = [];
+     $scope.torrents = [];
      /**
       * A btapp api runs on one of these ports
       */
@@ -54,6 +55,8 @@ angular.module('DuckieTV.controllers',['DuckieTV.utorrent'])
       uTorrent.statusQuery().then(function(result) {
         console.log("Received update!", result);
         $scope.rpc = result;
+        var torrents = result.torrents.map(function(el) { return el[Object.keys(el)[0]] });
+        $scope.torrents = angular.extend($scope.torrents, torrents);
       })
     }
 

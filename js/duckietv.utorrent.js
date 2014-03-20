@@ -1,4 +1,8 @@
+
 angular.module('DuckieTV.utorrent', [])
+/**
+ * Angular's private URL Builder method + unpublished dependencies converted to a public service
+ */
 .provider('URLBuilder', function() {
 	
 	function encodeUriQuery(val, pctEncodeSpaces) {
@@ -10,6 +14,9 @@ angular.module('DuckieTV.utorrent', [])
 	             replace(/%20/g, (pctEncodeSpaces ? '%20' : '+'));
 	}
 
+	/**
+	 * Angular's private buildUrl function, patched to refer to the public methods on the angular globals
+	 */
  	function buildUrl(url, params) {
       if (!params) return url;
       var parts = [];
@@ -38,6 +45,7 @@ angular.module('DuckieTV.utorrent', [])
     }
 
 })
+
 .provider('uTorrent', function() {
 	 this.http = null;
 	 this.promise = null;
@@ -57,12 +65,13 @@ angular.module('DuckieTV.utorrent', [])
 		 version: function(data) {
 		 	console.log("Found the port!!", data.data);
 		    return data.data;
-		 },
-		    
-		 ping: function(data) {
-		 		
 		 }
+
 	 };
+
+	 this.getParser = function(type) {
+	 	return (type in this.parsers) ? this.parsers[type] : function(data) { return data.data };
+	 }
 	 
 	 this.getUrl = function(type, param, param2) {
 	 	var out = this.endpoints[type];
@@ -73,25 +82,38 @@ angular.module('DuckieTV.utorrent', [])
 	 	return (param2 !== undefined) ? out.replace('%s', encodeURIComponent(param2)) : out;
 	 };
 
-	 this.getParser = function(type) {
-	 	return this.parsers[type];
-	 }
 
-	this.promiseRequest = function(type, param, param2) {
-	 	var d = this.promise.defer();
-	 	var url = this.getUrl(type, param, param2);
-	 	var parser = this.getParser(type);
-	    this.http.jsonp(url, {
-	    	method: 'GET',	        
-	        timeout: 3000,
-	      }).then(function(response) {
-	       d.resolve(parser(response));
-		}, function(err) {
-			console.log('error fetching', type);
-		  	d.reject(err);
-		});
-		return d.promise;
-	}
+ 	this.verifyPath = function(path) {
+            var collections = [
+                ['btapp', 'torrent'],
+                ['btapp', 'torrent', 'all', '*', 'file'],
+                ['btapp', 'torrent', 'all', '*', 'peer'],
+                ['btapp', 'label'],
+                ['btapp', 'label', 'all', '*', 'torrent'],
+                ['btapp', 'label', 'all', '*', 'torrent', 'all', '*', 'file'],
+                ['btapp', 'label', 'all', '*', 'torrent', 'all', '*', 'peer'],
+                ['btapp', 'rss'],
+                ['btapp', 'rss', 'all', '*', 'item'],
+                ['btapp', 'stream'],
+                ['btapp', 'stream', 'all', '*', 'diskio']
+            ];
+
+            return _.any(collections, function(collection) {
+                if(collection.length !== path.length) {
+                    return false;
+                }
+                for(var i = 0; i < collection.length; i++) {
+                    if(collection[i] === '*') {
+                        continue;
+                    }
+                    if(collection[i] !== path[i]) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        },
+	
 
 	/**
 	 * Build a JSONP request using the URLBuilder service.
@@ -120,7 +142,7 @@ angular.module('DuckieTV.utorrent', [])
  this.sessionKey = null;
  this.authToken = null;
 
- this.$get = function($q, $http, URLBuilder) {
+ this.$get = function($q, $http, URLBuilder, $parse) {
     var self = this;
     self.http = $http;
     self.promise = $q;
@@ -178,8 +200,24 @@ angular.module('DuckieTV.utorrent', [])
     			session: self.sessionKey,
     			type: 'update',
     			hostname: window.location.host
-    		}).then(function(result) {
-    			console.log("Fetched status result!", result);
+    		}).then(function(data) {
+    			console.log("Fetched status result!",data);
+
+			 	var adders = data.map(function(el) { return 'add' in el ? el.add : false }).filter(function(el) { return el != false });
+			 	var removers = data.map(function(el) { return 'remove' in el ? el.remove : false }).filter(function(el) { return el != false });
+			 	var updaters = data.map(function(el) { return 'update' in el ? el.update : false }).filter(function(el) { return el != false });
+			 	
+			 	var torrents = adders.map(function(el) { return $parse('btapp.torrent.all')(el); }).filter(function(el){ return el != undefined });
+			 	console.log("Found adders");
+			 	return { 
+			 		data: data,
+			 		add: adders,
+			 		remove: removers,
+			 		update: updaters,
+			 		torrents: torrents
+			 	}
+
+
     			return result;
     		}, function(error) {
     			console.error("Error executing get status query!", error);
@@ -204,6 +242,9 @@ angular.module('DuckieTV.utorrent', [])
 
 
 
+/*
+ // copy from btappjs for reverse engineering 
+
 function assert(b, err) { if(!b) { throw err; } }
 
 var TorrentClient = {
@@ -217,7 +258,7 @@ var TorrentClient = {
                 ['btapp', 'label', 'all', '*', 'torrent'],
                 ['btapp', 'label', 'all', '*', 'torrent', 'all', '*', 'file'],
                 ['btapp', 'label', 'all', '*', 'torrent', 'all', '*', 'peer'],
-                ['btapp', 'rss'],
+                ['btapp' ,'rss'],
                 ['btapp', 'rss', 'all', '*', 'item'],
                 ['btapp', 'stream'],
                 ['btapp', 'stream', 'all', '*', 'diskio']
@@ -405,23 +446,4 @@ var TorrentClient = {
         };
         return ret;
     }
-}
-
-function buildUrl(url, params) {
-          if (!params) return url;
-          var parts = [];
-          forEachSorted(params, function(value, key) {
-            if (value === null || isUndefined(value)) return;
-            if (!isArray(value)) value = [value];
-
-            forEach(value, function(v) {
-              if (isObject(v)) {
-                v = toJson(v);
-              }
-              parts.push(encodeUriQuery(key) + '=' +
-                         encodeUriQuery(v));
-            });
-          });
-          return url + ((url.indexOf('?') == -1) ? '?' : '&') + parts.join('&');
-        }
-
+} */

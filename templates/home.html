@@ -13,6 +13,12 @@
           <li ng-repeat="status in statusLog">{{status}}</li>
         </ul>
 
+        <ul class="torrents">
+          <li ng-repeat="torrent in torrents">
+          <h1>{{torrent.properties.all.name}}</h1>
+          </li>
+        </ul>
+
         <ul class="rpcMethod">
           <li ng-repeat="method in rpc">
           <pre>{{method|json}}</pre>
