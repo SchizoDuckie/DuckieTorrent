@@ -13,17 +13,33 @@
           <li ng-repeat="status in statusLog">{{status}}</li>
         </ul>
 
-        <ul class="torrents">
-          <li ng-repeat="torrent in rpc.torrents|orderObjectBy:'completed':true">
-          <strong>{{torrent.properties.all.completed_on * 1000 | date:'dd-MM-yyyy'}} {{torrent.properties.all.name}}</strong>
-          </li>
-        </ul>
+         <table class="torrents table table-condensed table-hover">
+          <tbody ng-repeat="torrent in rpc.torrents|orderBy:getStarted():true" ng-click="active = true">
+            <tr>
+             <th style='white-space:nowrap'>{{torrent.getStarted() * 1000 | date:'dd-MM-yyyy'}}</th>
+              <td> {{torrent.properties.all.name}}</td>
+              <td>{{torrent.getFormattedStatus()}}</td>
+              <td>
+               <div class="progress-striped progress">
+                <div class="progress-bar progress-bar-success" ng-style="{ width: torrent.getProgress() + '%' }">
+                  <span class="ng-scope ng-binding">{{torrent.getProgress()}}%</span>
+                 </div>
+                </div>
 
-        <ul class="rpcMethod">
-          <li ng-repeat="method in rpc">
-          <pre>{{method|json}}</pre>
-          </li>
-        </ul>
+              </tr>
+              <tr ng-if="active">
+               <td colspan="4">
+                <ul>
+                  <li ng-repeat="file in torrent.getFiles()">
+                    {{ file.name }} 
+                      <a ng-if="file.properties.all.is_streamable == true" ng-href="{{file.properties.all.streaming_url }}" target='_blank'>Click to play</a>
+                  </li>
+                </ul>
+              </td>
+            </tr> 
+            </tbody>
+          </table>
+
     </div>
   </div>
 </div>

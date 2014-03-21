@@ -48,7 +48,7 @@ angular.module('DuckieTV.utorrent', [])
 /**
  * uTorrent/Bittorrent remote singleton that receives the incoming data
  */
-.factory('TorrentRemote', function() {
+.factory('TorrentRemote', function($parse) {
 
 	/**
 	 * RPC Object that wraps the remote data that comes in from uTorrent.
@@ -62,7 +62,8 @@ angular.module('DuckieTV.utorrent', [])
 
 		for(var property in data) {
 			this[property] = this.isRPCFunctionSignature(data[property]) ? this.createFunction(property, data[property]) : data[property];
-		};
+			};
+		
 	};
 
 	RPCObject.prototype = {
@@ -76,11 +77,30 @@ angular.module('DuckieTV.utorrent', [])
 				'201': 'downloading',
 				'233' : 'paused'
 			}
-			if(!(this.properties.status in statuses)) {
-				return this.properties.status;
+			if(!(this.properties.all.status in statuses)) {
+				console.error("There's an unknown status for this torrent!", this.properties.all.status, this);
+				return this.properties.all.status;
 			}
-			return statuses[this.properties.status];
+			return statuses[this.properties.all.status];
 		},
+
+		getStarted: function() {
+			return $parse('properties.all.added_on')(this);
+		},
+
+		getProgress: function() {
+			var pr = $parse('properties.all.progress')(this);
+			return pr ? pr / 10 : pr;
+		},
+
+		getFiles: function() {
+			var files = [];
+			angular.forEach($parse('file.all')(this), function(el, key) { 
+				files.push(el);
+			});
+			return files;
+		},
+
 		/**
 		 * The torrent is started if the status is uneven.
 		 */
@@ -290,7 +310,7 @@ angular.module('DuckieTV.utorrent', [])
 	 	pair: 'http://localhost:%s/gui/pair',
 	 	version: 'http://localhost:%s/version/',
 	 	ping: 'http://localhost:%s/gui/pingimg',
-	 	api: 'http://127.0.0.1:10000/btapp/',
+	 	api: 'http://localhost:%s/btapp/',
 	 };
 
 	 this.parsers = {
