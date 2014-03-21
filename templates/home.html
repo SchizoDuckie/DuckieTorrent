@@ -5,17 +5,17 @@
       
 
         <button ng-click="Scan()">Scan for a listening torrent client</button>
-		<button ng-click="Pair()" ng-if="!authToken">Pair on found torrent client</button>
-		<button ng-click="Connect()" ng-if="authToken">Connect to uTorrent with auth token: {{authToken}}</button>
-     <button ng-click="Update()" ng-if="session">Fetch RPC methods</button>
+    		<button ng-click="Pair()" ng-if="!authToken">Pair on found torrent client</button>
+    		<button ng-click="Connect()" ng-if="authToken">Connect to uTorrent with auth token: {{authToken}}</button>
+        <button ng-click="Update()" ng-if="session">Fetch RPC methods</button>
 
         <ul class="status">
           <li ng-repeat="status in statusLog">{{status}}</li>
         </ul>
 
         <ul class="torrents">
-          <li ng-repeat="torrent in torrents">
-          <h1>{{torrent.properties.all.name}}</h1>
+          <li ng-repeat="torrent in rpc.torrents|orderObjectBy:'completed':true">
+          <strong>{{torrent.properties.all.completed_on * 1000 | date:'dd-MM-yyyy'}} {{torrent.properties.all.name}}</strong>
           </li>
         </ul>
 

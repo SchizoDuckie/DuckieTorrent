@@ -18,6 +18,20 @@ angular.module('DuckieTorrent', [
         return $sce.trustAsHtml(val);
     };
 })
+.filter('orderObjectBy', function() {
+  return function(items, field, reverse) {
+    var filtered = [];
+    angular.forEach(items, function(item) {
+      filtered.push(item);
+    });
+    filtered.sort(function (a, b) {
+      return (a[field] > b[field]);
+    });
+    if(reverse) filtered.reverse();
+    return filtered;
+  };
+})
+
 /**
  * Routing configuration. 
  */
@@ -33,3 +47,6 @@ angular.module('DuckieTorrent', [
    
 })
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+};
