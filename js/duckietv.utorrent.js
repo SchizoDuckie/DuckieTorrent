@@ -45,8 +45,18 @@ angular.module('DuckieTV.utorrent', [])
     }
 
 })
+/**
+ * uTorrent/Bittorrent remote singleton that receives the incoming data
+ */
 .factory('TorrentRemote', function() {
 
+	/**
+	 * RPC Object that wraps the remote data that comes in from uTorrent.
+	 * It stores all regular properties on itself
+	 * and makes sure that the remote function signatures are verified (using some code borrowed from the original btapp.js) 
+	 * and a dispatching function with the matching signature is created and mapped to the RPCCallService 
+	 * (to keep the overhead of creating many rpc call functions as low as possible)
+	 */
 	var RPCObject = function(data) {
 		var callbacks = {};
 
@@ -56,6 +66,27 @@ angular.module('DuckieTV.utorrent', [])
 	};
 
 	RPCObject.prototype = {
+		/**
+		 * Return a human-readable status for a torrent
+		 */
+		getFormattedStatus: function() {
+			var statuses = {
+				'136' : 'stopped',
+				'137' : 'started',
+				'201': 'downloading',
+				'233' : 'paused'
+			}
+			if(!(this.properties.status in statuses)) {
+				return this.properties.status;
+			}
+			return statuses[this.properties.status];
+		},
+		/**
+		 * The torrent is started if the status is uneven.
+		 */
+		isStarted: function() {
+			return this.properties.status % 2 === 1;
+		},
 	    // We can't send function pointers to the torrent client server, so we'll send
         // the name of the callback, and the server can call this by sending an event with
         // the name and args back to us. We're responsible for making the call to the function
@@ -145,6 +176,8 @@ angular.module('DuckieTV.utorrent', [])
         	var func = function() {
         		return RPCCallService.call(path, signatures, arguments);
         		/*
+        		todo: move all of this to rpccall service
+				todo: resolve the path recursively
             	var args = [];
                 // Lets do a bit of validation of the arguments that we're passing into the client
                 // unfortunately arguments isn't a completely authetic javascript array, so we'll have
@@ -167,64 +200,7 @@ angular.module('DuckieTV.utorrent', [])
             func.valueOf = function() { return 'function'+ signatures.substring(4) + ' (returns promise)' };
            
             return func;
-        },
-        // Functions are simply urls that we make ajax request to. The cb is called with the
-        // result of that ajax request.
-        createFunct: function(path, signatures) {
-
-            var func = function() {
-                var args = [];
-
-                // Lets do a bit of validation of the arguments that we're passing into the client
-                // unfortunately arguments isn't a completely authetic javascript array, so we'll have
-                // to "splice" by hand. All this just to validate the correct types! sheesh...
-                var i;
-                for(i = 0; i < arguments.length; i++) {
-                    args.push(arguments[i]);
-                }
-                // This is as close to a static class function as you can get in javascript i guess
-                // we should be able to use verifySignaturesArguments to determine if the client will
-                // consider the arguments that we're passing to be valid
-                if(!TorrentClient.prototype.validateArguments.call(this, signatures, args)) {
-                    throw 'arguments do not match any of the function signatures exposed by the client';
-                }
-
-                this.convertCallbackFunctionArgs(args);
-                var ret = new jQuery.Deferred();
-                var success = _.bind(function(data) {
-                    //lets strip down to the relevent path data
-                    _.each(path, function(segment) {
-                        var decoded = decodeURIComponent(segment);
-                        if(typeof data !== 'undefined') {
-                            data = data[decoded];
-                        }
-                    });
-                    if(typeof data === 'undefined') {
-                        ret.reject('return value parsing error ' + JSON.stringify(data));
-                    } else if(typeof data === 'string' && this.isJSFunctionSignature(data)) {
-                        var func = this.getStoredFunction(data);
-                        assert(func, 'the client is returning a function name that does not exist');
-                        ret.resolve(func);
-                    } else {
-                        ret.resolve(data);
-                    }
-                }, this);
-                var error = function(data) {
-                    ret.reject(data);
-                };
-                this.query({
-                    type: 'function', 
-                    path: JSON.stringify(path),
-                    args: JSON.stringify(args),
-                    session: session
-                }).done(success).fail(error);
-                this.trigger('queries', path);
-                return ret;
-            }.bind(this);
-            //func.valueOf = function() { return signatures; };
-            return func;
         }
-
 
 	};
 	var service = {
