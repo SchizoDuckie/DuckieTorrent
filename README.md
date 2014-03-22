@@ -26,3 +26,7 @@ Future features:
 Screenshot
 ==========
 !['DuckieTorrent Angular'](http://i.imgur.com/D0VCa4E.png)
+
+Live Demo
+=========
+http://schizoduckie.github.io/DuckieTorrent/
