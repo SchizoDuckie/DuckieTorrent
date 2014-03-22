@@ -43,115 +43,22 @@ angular.module('DuckieTV.utorrent', [])
     	}
 
     }
-
 })
-/**
- * uTorrent/Bittorrent remote singleton that receives the incoming data
- */
-.factory('TorrentRemote', function($parse) {
-
-	/**
-	 * RPC Object that wraps the remote data that comes in from uTorrent.
-	 * It stores all regular properties on itself
-	 * and makes sure that the remote function signatures are verified (using some code borrowed from the original btapp.js) 
-	 * and a dispatching function with the matching signature is created and mapped to the RPCCallService 
-	 * (to keep the overhead of creating many rpc call functions as low as possible)
-	 */
-	var RPCObject = function(data) {
-		var callbacks = {};
-
-		for(var property in data) {
-			this[property] = this.isRPCFunctionSignature(data[property]) ? this.createFunction(property, data[property]) : data[property];
-		};
-	};
-
-	RPCObject.prototype = {
-		/**
-		 * Return a human-readable status for a torrent
-		 */
-		getFormattedStatus: function() {
-			var statuses = {
-				'136' : 'stopped',
-				'137' : 'started',
-				'201': 'downloading',
-				'233' : 'paused'
-			}
-			if(!(this.properties.all.status in statuses)) {
-				console.error("There's an unknown status for this torrent!", this.properties.all.status, this);
-				return this.properties.all.status;
-			}
-			return statuses[this.properties.all.status];
-		},
-
-		getStarted: function() {
-			return $parse('properties.all.added_on')(this);
-		},
-
-		getProgress: function() {
-			var pr = $parse('properties.all.progress')(this);
-			return pr ? pr / 10 : pr;
-		},
-
-		getFiles: function() {
-			var files = [];
-			angular.forEach($parse('file.all')(this), function(el, key) { 
-				files.push(el);
-			});
-			return files;
-		},
-
-		/**
-		 * The torrent is started if the status is uneven.
-		 */
-		isStarted: function() {
-			return this.properties.status % 2 === 1;
-		},
-	    // We can't send function pointers to the torrent client server, so we'll send
-        // the name of the callback, and the server can call this by sending an event with
-        // the name and args back to us. We're responsible for making the call to the function
-        // when we detect this. This is the same way that jquery handles ajax callbacks.
-        storeCallbackFunction: function(cb) {
-        	console.log("Create a callback function for ", cb);
-            cb = cb || function() {};
-            var str = 'bt_'+new Date().getTime();
-            this.btappCallbacks[str] = cb;
-            return str;
-        },
-        // We expect function signatures that come from the client to have a specific syntax
-        isRPCFunctionSignature: function(f) {
-            return typeof f === 'string' && (f.match(/\[native function\](\([^\)]*\))+/) || f.match(/\[nf\](\([^\)]*\))+/));
-        },
-        isJSFunctionSignature: function(f) {
-            return typeof f === 'string' && f.match(/\[nf\]bt_/);
-        },
-        getStoredFunction: function(f) {
-            if(!this.isJSFunctionSignature(f)) {
-            	console.error('only store functions that match the pattern "[nf]bt_*"');
-            	return;
-            }
-            var key = f.substring(4);
-            if(!key in this.btappCallbacks) {
-            	console.error("trying to get a function with a key that is not recognized", key, this);
-            	return;
-            }
-            return this.callbacks[key];
-        },
-        // Seeing as we're interfacing with a strongly typed language c/c++ we need to
+.factory('RPCCallService', function() {
+	var service = {
+		// Seeing as we're interfacing with a strongly typed language c/c++ we need to
         // ensure that our types are at least close enough to coherse into the desired types
         // takes something along the lines of "[native function](string,unknown)(string)".
         validateArguments: function(functionValue, variables) {
-        	if(typeof functionValue === 'string') {
-        		console.error("Expected functionValue to be a string", functionValue, variables);
-        		return false;
-        	}
-        	if(typeof functionValue === 'object') {
-        		console.error("Expected functionValue to be an object", functionValue, variables);
+        	if(typeof functionValue !== 'string') {
+
+        		console.error("Expected functionValue to be a string", functionValue, typeof functionValue, variables);
         		return false;
         	}
             var signatures = functionValue.match(/\(.*?\)/g);
             return signatures.filter(function(signature) {
                 signature = signature.match(/\w+/g) || []; //["string","unknown"]
-                return signature.length === variables.length && _.all(signature, function(type,index) {
+                return signature.length === variables.length && signature.map(function(type,index) {
                     if(typeof variables[index] === 'undefined') {
                         throw 'client functions do not support undefined arguments';
                     } else if(typeof variables[index] === 'null') {
@@ -185,39 +92,121 @@ angular.module('DuckieTV.utorrent', [])
                 // We are responsible for converting functions to variable names...
                 // this will be called later via a event with a callback and arguments variables
                 if(typeof value === 'function') {
-                   args[key] = this.storeCallbackFunction(value);
+                   args[key] = service.storeCallbackFunction(value);
                 } else if(typeof value === 'object' && value) {
-                    this.convertCallbackFunctionArgs(value);
+                    service.convertCallbackFunctionArgs(value);
                 }
             }, this);
         },
-        createFunction: function(path, signatures) {
-        	var func = function() {
-        		return RPCCallService.call(path, signatures, arguments);
-        		/*
-        		todo: move all of this to rpccall service
-				todo: resolve the path recursively
-            	var args = [];
-                // Lets do a bit of validation of the arguments that we're passing into the client
-                // unfortunately arguments isn't a completely authetic javascript array, so we'll have
-                // to "splice" by hand. All this just to validate the correct types! sheesh...
-                var i;
-                for(i = 0; i < arguments.length; i++) {
-                    args.push(arguments[i]);
-                }
-                // This is as close to a static class function as you can get in javascript i guess
-                // we should be able to use verifySignaturesArguments to determine if the client will
-                // consider the arguments that we're passing to be valid
-                if(!TorrentClient.prototype.validateArguments.call(this, signatures, args)) {
-                    throw 'arguments do not match any of the function signatures exposed by the client';
-                }
 
-                this.convertCallbackFunctionArgs(args);
-                return RPCFunctionCallerService.RemoteProcedureCall(path, args);
-                */
+        // We can't send function pointers to the torrent client server, so we'll send
+        // the name of the callback, and the server can call this by sending an event with
+        // the name and args back to us. We're responsible for making the call to the function
+        // when we detect this. This is the same way that jquery handles ajax callbacks.
+        storeCallbackFunction: function(cb) {
+        	console.log("Create a callback function for ", cb);
+            cb = cb || function() {};
+            var str = 'bt_'+new Date().getTime();
+            this.btappCallbacks[str] = cb;
+            return str;
+        },
+
+		call: function(path, signature, args, rpcTarget) {
+			console.log("Trying to call RPC function: ", path, signature, args);
+            // This is as close to a static class function as you can get in javascript i guess
+            // we should be able to use verifySignaturesArguments to determine if the client will
+            // consider the arguments that we're passing to be valid
+            if(!service.validateArguments.call(service, signature, args)) {
+            	console.error("Arguments do not match signature!", args, signature, path);
+                throw 'arguments do not match any of the function signatures exposed by the client';
+            }
+            service.convertCallbackFunctionArgs(args);
+            console.log("Calling RPC Function!", path, signature, args);
+            return rpcTarget(path, args);
+
+		}
+	};
+
+	return service;
+})
+/**
+ * uTorrent/Bittorrent remote singleton that receives the incoming data
+ */
+.factory('TorrentRemote', function($parse, RPCCallService) {
+
+	/**
+	 * RPC Object that wraps the remote data that comes in from uTorrent.
+	 * It stores all regular properties on itself
+	 * and makes sure that the remote function signatures are verified (using some code borrowed from the original btapp.js) 
+	 * and a dispatching function with the matching signature is created and mapped to the RPCCallService 
+	 * (to keep the overhead of creating many rpc call functions as low as possible)
+	 */
+	var RPCObject = function(path, data, RPCProxy) {
+		var callbacks = {};
+
+		for(var property in data) {
+			this[property] = this.isRPCFunctionSignature(data[property]) ? this.createFunction(path, property, data[property], RPCProxy) : data[property];
+		};
+	};
+
+	RPCObject.prototype = {
+		/**
+		 * Return a human-readable status for a torrent
+		 */
+		getFormattedStatus: function() {
+			var statuses = {
+				'136' : 'stopped',
+				'137' : 'started',
+				'152' : 'Error: Files missing, please recheck',
+				'201' : 'downloading',
+				'233' : 'paused'
+			}
+			if(!(this.properties.all.status in statuses)) {
+				console.error("There's an unknown status for this torrent!", this.properties.all.status, this);
+				return this.properties.all.status;
+			}
+			return statuses[this.properties.all.status];
+		},
+
+		getStarted: function() {
+			return $parse('properties.all.added_on')(this);
+		},
+
+		getProgress: function() {
+			var pr = $parse('properties.all.progress')(this);
+			return pr ? pr / 10 : pr;
+		},
+
+		getFiles: function() {
+			var files = [];
+			angular.forEach($parse('file.all')(this), function(el, key) { 
+				files.push(el);
+			});
+			return files;
+		},
+
+		/**
+		 * The torrent is started if the status is uneven.
+		 */
+		isStarted: function() {
+			return this.properties.status % 2 === 1;
+		},
+	   
+        // We expect function signatures that come from the client to have a specific syntax
+        isRPCFunctionSignature: function(f) {
+            return typeof f === 'string' && (f.match(/\[native function\](\([^\)]*\))+/) || f.match(/\[nf\](\([^\)]*\))+/));
+        },
+        
+        createFunction: function(path, func, signature, RPCProxy) {
+        	path = 'btapp.'+path+'.'+func;
+        	var func = function() {
+        		var i, args = [];
+	            for(i = 0; i < arguments.length; i++) {
+	                args.push(arguments[i]);
+	            }
+        		return RPCCallService.call(path, signature, args, RPCProxy);
             }
             func.valueOf = function() { return 'function'+ signatures.substring(4) + ' (returns promise)' };
-           
             return func;
         }
 
@@ -256,16 +245,15 @@ angular.module('DuckieTV.utorrent', [])
 			return out;
 		},
 
-		addTorrent: function(data) {
+		addTorrent: function(data, RPCProxy) {
 			var key = Object.keys(data)[0];
 			if(key in this.torrents) {
 				Object.deepMerge(this.torrents[key], data[key]);
 				console.log('Torrent updated! ', this.torrents[key], data[key] );
 			} else {
-				this.torrents[key] = new RPCObject(data[key]);
-				console.log("Add torrent!", this.getTorrentName(data[key]), this.torrents[key], data);
+				this.torrents[key] = new RPCObject('torrent.all.'+key, data[key], RPCProxy);
+				//console.log("Add torrent!", key, this.getTorrentName(data[key]), this.torrents[key], data);
 			}
-			
 		},
 
 		addEvents: function(data) {
@@ -319,11 +307,11 @@ angular.module('DuckieTV.utorrent', [])
 			console.log("Add stream!", data);
 		},
 
-		handleEvent : function(type, category, data) {
+		handleEvent : function(type, category, data, RPCProxy) {
 			if(!(type+String.capitalize(category) in this)) {
 				console.error ("Method not implemented: " + type + category.capitalize(), data);
 			} else {
-				this[type+String.capitalize(category)](data);	
+				this[type+String.capitalize(category)](data, RPCProxy);	
 			}
 		}
 
@@ -432,7 +420,7 @@ angular.module('DuckieTV.utorrent', [])
     self.http = $http;
     self.promise = $q;
     self.urlbuilder = URLBuilder;
-    return {
+    var methods = {
     	portScan: function(ports) {
     		var d = self.promise.defer();
 
@@ -500,13 +488,37 @@ angular.module('DuckieTV.utorrent', [])
     				   data = 'all' in el[type].btapp[category] ? el[type].btapp[category].all : el[type].btapp[category];
     				   if(!('all' in  el[type].btapp[category])) category += 'Methods';
     				}
-    				console.info('Status result => ', type, category, el[type].btapp[category], el);
-    				TorrentRemote.handleEvent(type, category, data);
+    				
+    				TorrentRemote.handleEvent(type, category, data, methods.RPC);
     			});
     			return TorrentRemote;
     		}, function(error) {
     			console.error("Error executing get status query!", error);
     		})
+    	},
+
+/**
+pairing:46C5E2A3BCACCECFC255463BAD209D16AB71D847
+type:function
+path:["btapp","torrent","all","03F4379B8FE65EB3F12B6440265A65F0511CE714","force_start"]
+args:[]
+session:25634
+hostname:localhost
+callback:jQuery171037287758057937026_1395489882289
+_:1395489960507
+*/
+    	RPC: function(path, args) {
+    		p = path.split('.');
+    		console.debug("Path:", p);;
+    		if(!args) args = [];
+    		return self.jsonp('api', {
+    			pairing: self.authToken,
+    			session: self.sessionKey,
+    			type: 'function',
+    			path: [p],
+    			'args': '[]',
+    			hostname: window.location.host
+    		});
     	},
 
     	attachEvents: function() {
@@ -521,7 +533,8 @@ angular.module('DuckieTV.utorrent', [])
 			args:["appUninstall","bt_61359101496962791011"] */
     	}
 
-    }
+    };
+    return methods;
   }
 });
 

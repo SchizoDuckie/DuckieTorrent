@@ -12,8 +12,8 @@
         <button ng-click="Scan()">Scan for a listening torrent client</button>
     		<button ng-click="Pair()" ng-if="!authToken">Pair on found torrent client</button>
     		<button ng-click="Connect()" ng-if="authToken">Connect to uTorrent with auth token: {{authToken}}</button>
-        <button ng-click="Update()" ng-if="session">Start polling for data</button>
-
+        <button ng-if="session && !polling" ng-click="togglePolling();">Connect to uTorrent</button>
+      <button ng-if="session && polling" ng-click="togglePolling();">Disconnect from uTorrent</button>
         <ul class="status">
           <li ng-repeat="status in statusLog">{{status}}</li>
         </ul>
@@ -35,6 +35,15 @@
               <tr ng-if="active">
                <td colspan="4">
                 <ul>
+                  <button ng-click="torrent.start();" class="btn btn-ok">Start</button>
+
+                  <button ng-click="torrent.stop();" class="btn btn-ok">Stop</button>
+                  
+
+                  <button ng-click="torrent.pause();" class="btn btn-ok">Pause</button>
+
+                  <button ng-click="torrent.stream();" class="btn btn-ok">Stream</button>
+                  <button ng-click="torrent.open_containing();" class="btn btn-ok">Open folder</button>
                   <li ng-repeat="file in torrent.getFiles()">
                     {{ file.name }} 
                       <a ng-if="file.properties.all.is_streamable == true" ng-href="{{file.properties.all.streaming_url }}" target='_blank'>Click to play</a>

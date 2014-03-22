@@ -12,6 +12,7 @@ angular.module('DuckieTV.controllers',['DuckieTV.utorrent'])
      $scope.authToken = localStorage.getItem('utorrent.token')
      uTorrent.setPort(localStorage.getItem('utorrent.port'));
      $scope.rpc = null;
+     $scope.polling = false;
      /**
       * A btapp api runs on one of these ports
       */
@@ -66,18 +67,25 @@ angular.module('DuckieTV.controllers',['DuckieTV.utorrent'])
        })
     }
 
+    $scope.togglePolling = function() {
+      $scope.polling = !$scope.polling;
+      $scope.Update();
+    }
     /**
      * Start the status update polling.
      * Stores the resulting TorrentClient service in $scope.rpc
      * Starts polling every 1s.
      */
     $scope.Update = function() {
-      uTorrent.statusQuery().then(function(result) {
-        if(!$scope.rpc) {
-          $scope.rpc = result;
-        }
-        setTimeout($scope.Update,1000);
-      })
+      
+      if($scope.polling == true) {
+          uTorrent.statusQuery().then(function(result) {
+          if(!$scope.rpc) {
+            $scope.rpc = result;
+          }
+          if($scope.polling) setTimeout($scope.Update,3000);
+        })
+      }
     }
 
     
