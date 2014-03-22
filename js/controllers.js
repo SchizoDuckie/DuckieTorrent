@@ -84,7 +84,7 @@ angular.module('DuckieTorrent.controllers',['DuckieTorrent.torrent'])
     $scope.Update = function() {
       if($scope.polling == true) {
           uTorrent.statusQuery().then(function(data) {
-            if($scope.polling) setTimeout($scope.Update, data.length == 0 ? 3000 : 0);
+            if($scope.polling) setTimeout($scope.Update, data.length == 0 ? 3000 : 0); // burst when more data comes in, delay when things ease up.
           });
       }
     }
