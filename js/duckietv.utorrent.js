@@ -62,8 +62,7 @@ angular.module('DuckieTV.utorrent', [])
 
 		for(var property in data) {
 			this[property] = this.isRPCFunctionSignature(data[property]) ? this.createFunction(property, data[property]) : data[property];
-			};
-		
+		};
 	};
 
 	RPCObject.prototype = {
@@ -226,6 +225,14 @@ angular.module('DuckieTV.utorrent', [])
 	var service = {
 		torrents : {},
 		settings: {},
+		getNameFunc: null,
+
+		getTorrentName: function(torrent) {
+			if(!service.getNameFunc) {
+				service.getNameFunc = $parse('properties.all.name');
+			}
+			return(service.getNameFunc(torrent))
+		},
 
 		addEvent: function(torrent) {
 			console.log("Add to list: ", torrent);
@@ -234,19 +241,32 @@ angular.module('DuckieTV.utorrent', [])
 
 		removeEvent: function(torrent) {
 			console.log("Remove from list: ", torrent);
-			delete this.torrents[torrent.hash];
+			//delete this.torrents[torrent.hash];
 		},
 
 		addSettings: function(data) {
-
 			console.log("Add Settings!", data);
+		},
 
+		getTorrents: function() {
+			var out = [];
+			angular.forEach(service.torrents, function(el) {
+				out.push(el);
+			})
+			console.log("Get torrents!", out);
+			return out;
 		},
 
 		addTorrent: function(data) {
 			var key = Object.keys(data)[0];
-			this.torrents[key] = new RPCObject(data[key]);
-			console.log("Add torrent!", this.torrents[key]);
+			if(key in this.torrents) {
+				Object.deepMerge(this.torrents[key], data[key]);
+				console.log('Torrent updated! ', this.torrents[key], data[key] );
+			} else {
+				this.torrents[key] = new RPCObject(data[key]);
+				console.log("Add torrent!", this.getTorrentName(data[key]), this.torrents[key], data);
+			}
+			
 		},
 
 		addEvents: function(data) {
@@ -274,6 +294,16 @@ angular.module('DuckieTV.utorrent', [])
 			console.log("Add RSS Methods: ", data);
 		},
 
+		addBtappMethods:function(data) {
+			console.log("Add BTAPP Methods: ", data);
+		
+		},
+
+		addOsMethods:function(data) {
+			console.log("Add BTAPP Methods: ", data);
+		
+		},
+
 		addAddMethods: function(data) {
 			console.log("Add Add Methods: ", data);
 		},
@@ -291,10 +321,10 @@ angular.module('DuckieTV.utorrent', [])
 		},
 
 		handleEvent : function(type, category, data) {
-			if(!(type+category.capitalize() in this)) {
+			if(!(type+String.capitalize(category) in this)) {
 				console.error ("Method not implemented: " + type + category.capitalize(), data);
 			} else {
-				this[type+category.capitalize()](data);	
+				this[type+String.capitalize(category)](data);	
 			}
 		}
 
@@ -471,7 +501,7 @@ angular.module('DuckieTV.utorrent', [])
     				   data = 'all' in el[type].btapp[category] ? el[type].btapp[category].all : el[type].btapp[category];
     				   if(!('all' in  el[type].btapp[category])) category += 'Methods';
     				}
-    				console.info(type, category, el[type].btapp[category], el);
+    				console.info('Status result => ', type, category, el[type].btapp[category], el);
     				TorrentRemote.handleEvent(type, category, data);
     			});
     			return TorrentRemote;

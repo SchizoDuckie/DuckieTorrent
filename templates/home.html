@@ -7,14 +7,14 @@
         <button ng-click="Scan()">Scan for a listening torrent client</button>
     		<button ng-click="Pair()" ng-if="!authToken">Pair on found torrent client</button>
     		<button ng-click="Connect()" ng-if="authToken">Connect to uTorrent with auth token: {{authToken}}</button>
-        <button ng-click="Update()" ng-if="session">Fetch RPC methods</button>
+        <button ng-click="Update()" ng-if="session">Start polling for data</button>
 
         <ul class="status">
           <li ng-repeat="status in statusLog">{{status}}</li>
         </ul>
 
          <table class="torrents table table-condensed table-hover">
-          <tbody ng-repeat="torrent in rpc.torrents|orderBy:getStarted():true" ng-click="active = true">
+          <tbody ng-repeat="torrent in rpc.getTorrents()|orderBy:'getStarted()':true" ng-click="active = true">
             <tr>
              <th style='white-space:nowrap'>{{torrent.getStarted() * 1000 | date:'dd-MM-yyyy'}}</th>
               <td> {{torrent.properties.all.name}}</td>
