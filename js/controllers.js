@@ -1,4 +1,4 @@
-angular.module('DuckieTV.controllers',['DuckieTV.utorrent'])
+angular.module('DuckieTorrent.controllers',['DuckieTorrent.torrent'])
 
 
 /**
@@ -16,6 +16,10 @@ angular.module('DuckieTV.controllers',['DuckieTV.utorrent'])
      /**
       * A btapp api runs on one of these ports
       */
+
+      $scope.playInBrowser = function(torrent) {
+         window.open(torrent.properties.all.streaming_url);
+      }
     function get_port(i) {
         return 7 * Math.pow(i, 3) + 3 * Math.pow(i, 2) + 5 * i + 10000;
     }
@@ -49,6 +53,7 @@ angular.module('DuckieTV.controllers',['DuckieTV.utorrent'])
       uTorrent.connect($scope.authToken).then(function(result) {
         $scope.statusLog.push('Connected with authToken '+$scope.authToken+' to session '+result.session);
         $scope.session = result.session;
+        $scope.rpc = uTorrent.getRemote();
       });
     }
 
@@ -77,14 +82,10 @@ angular.module('DuckieTV.controllers',['DuckieTV.utorrent'])
      * Starts polling every 1s.
      */
     $scope.Update = function() {
-      
       if($scope.polling == true) {
-          uTorrent.statusQuery().then(function(result) {
-          if(!$scope.rpc) {
-            $scope.rpc = result;
-          }
-          if($scope.polling) setTimeout($scope.Update,3000);
-        })
+          uTorrent.statusQuery().then(function(data) {
+            if($scope.polling) setTimeout($scope.Update, data.length == 0 ? 3000 : 0);
+          });
       }
     }
 

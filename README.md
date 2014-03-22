@@ -14,13 +14,14 @@ Features:
 * Show files
 * Show download progress
 
-Future features:
 * Call Remote Procedures on connected client
 * Allow streaming via html5 <video>
 * Launch files via native player
 * Start / Stop / Add / Remove torrents
-* Set uTorrent configs
 
+Future features:
+* Set uTorrent configs
+* Updates of progress while downloading
 
 Screenshot
 ==========

@@ -17,38 +17,43 @@
         <ul class="status">
           <li ng-repeat="status in statusLog">{{status}}</li>
         </ul>
+          <h2>Torrents: {{rpc.getTorrents().length}}</h2>
+         <table class="torrents table table-condensed table-striped">
+            <tr ng-repeat="torrent in rpc.getTorrents()|orderBy:'getStarted()':true">
+             <th style='white-space:nowrap'>{{torrent.getStarted() * 1000 | date:'dd-MM-yyyy'}}<br><span class="label label-info">{{torrent.getFormattedStatus()}}</span></th>
+              <td> 
+                <h3>{{torrent.properties.all.name}}</h3>
+                <table class="table table-condensed table-striped" style='width:95%'>
+                <thead>
+                <tr> <th>Filename</th><td>&nbsp;</td></tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="file in torrent.getFiles()">
+                  <td>{{ file.name }}</td>
+                  <td style='width: 150px'>
+                      <button class="btn btn-xs btn-success" ng-if="file.properties.all.is_streamable == true" ng-click="playInBrowser(file)"><i class="glyphicon glyphicon-share" style="padding-right: 5px;"></i> Play in browser</button>
+                  </td>
+                </tr>
+                </tbody>
+                </table>
 
-         <table class="torrents table table-condensed table-hover">
-          <tbody ng-repeat="torrent in rpc.getTorrents()|orderBy:'getStarted()':true" ng-click="active = true">
-            <tr>
-             <th style='white-space:nowrap'>{{torrent.getStarted() * 1000 | date:'dd-MM-yyyy'}}</th>
-              <td> {{torrent.properties.all.name}}</td>
-              <td>{{torrent.getFormattedStatus()}}</td>
+              </td>
+              <td style='width:220px; text-align: center'><button ng-click="torrent.start();" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-play"></i> Start</button>
+                  <button ng-click="torrent.pause();" class="btn btn-xs btn-primary"><i class="glyphicon  glyphicon-pause"></i> Pause</button>
+                  <button ng-click="torrent.stop();" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-stop"></i> Stop</button>
+                  <button ng-if="torrent.properties.all.is_streamable"  style="margin-top: 5px" ng-click="torrent.stream();" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-bullhorn"></i> Stream with uTorrent player</button>   
+                  <button ng-click="torrent.open_containing();" class="btn btn-xs btn-primary" style="margin-top: 5px" >
+                  <i class="glyphicon glyphicon-folder-open" style='padding-right: 10px'></i>Open containing folder</button> 
+              </td>
               <td>
-               <div class="progress-striped progress">
+              <strong>Progres</strong>
+               <div class="progress-striped progress" style='width:170px'>
                 <div class="progress-bar progress-bar-success" ng-style="{ width: torrent.getProgress() + '%' }">
-                  <span class="ng-scope ng-binding">{{torrent.getProgress()}}%</span>
+                  <span>{{torrent.getProgress()}}%</span>
+
                  </div>
                 </div>
-
-              </tr>
-              <tr ng-if="active">
-               <td colspan="4">
-                <ul>
-                  <button ng-click="torrent.start();" class="btn btn-ok">Start</button>
-
-                  <button ng-click="torrent.stop();" class="btn btn-ok">Stop</button>
-                  
-
-                  <button ng-click="torrent.pause();" class="btn btn-ok">Pause</button>
-
-                  <button ng-click="torrent.stream();" class="btn btn-ok">Stream</button>
-                  <button ng-click="torrent.open_containing();" class="btn btn-ok">Open folder</button>
-                  <li ng-repeat="file in torrent.getFiles()">
-                    {{ file.name }} 
-                      <a ng-if="file.properties.all.is_streamable == true" ng-href="{{file.properties.all.streaming_url }}" target='_blank'>Click to play</a>
-                  </li>
-                </ul>
+                
               </td>
             </tr> 
             </tbody>
