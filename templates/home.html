@@ -3,6 +3,11 @@
     <div class="container-fluid">
         <h2>uTorrent client in angular</h2>
       
+        <div class="alert alert-block">Start utorrent, click the scan and then pair button.<br>
+        Then press connect and start polling to see your local list of torrents.<br>
+        Click on a torrent to expand it's list of files<br>
+        <strong>Note:</strong> The 'click to play' button won't work until i've implemented the rpc calls
+        </div>
 
         <button ng-click="Scan()">Scan for a listening torrent client</button>
     		<button ng-click="Pair()" ng-if="!authToken">Pair on found torrent client</button>

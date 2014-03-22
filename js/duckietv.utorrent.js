@@ -253,7 +253,6 @@ angular.module('DuckieTV.utorrent', [])
 			angular.forEach(service.torrents, function(el) {
 				out.push(el);
 			})
-			console.log("Get torrents!", out);
 			return out;
 		},
 
