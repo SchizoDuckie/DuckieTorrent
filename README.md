@@ -4,7 +4,7 @@ DuckieTorrent
 W.I.P. Trying to mimic btapp.js in angularjs service and provide a clean service interface to connect to uTorrent / Bittorent and execute RPC calls via the
 interface provided.
 
-This means that you can control Utorrent from your angular app.
+This means that you can control Utorrent (starting from v3.3) from your angular app.
 
 Features:
 * Port scan for a listening torrent client
