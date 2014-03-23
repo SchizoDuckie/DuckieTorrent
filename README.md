@@ -25,7 +25,7 @@ Future features:
 
 Screenshot
 ==========
-!['DuckieTorrent Angular'](http://i.imgur.com/D0VCa4E.png)
+!['DuckieTorrent Angular'](http://i.imgur.com/MMvGwX4.png)
 
 Live Demo
 =========
