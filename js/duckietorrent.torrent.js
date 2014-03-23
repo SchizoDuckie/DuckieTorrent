@@ -10,7 +10,7 @@
  * dependencies to Torque, Backbone, Lodash, etc that btapp.js has. This should be a service with
  * a completely separated GUI, which it is now.
  *
- * The Utorrent/Bittorrent clients listen on 20 ports on localhost to allow other apps to connect
+ * The Utorrent/Bittorrent clients listen on one of 20 ports on localhost to allow other apps to connect
  * to them.
  * Discovery is done by performing a /version request to these ports until the first hit
  * After that, an authentication token is requested on the client (you need to save this somewhere, the demo does so in localStorage)
