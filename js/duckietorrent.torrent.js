@@ -111,7 +111,7 @@ angular.module('DuckieTorrent.torrent', [])
                     var nextPort = function() {
                         console.log("Next port!", ports, self.currentPort);
                         self.port = ports[self.currentPort];
-                        self.jsonp('version').then(function(result) {
+                        jsonp('version').then(function(result) {
                             console.log("Portscan finished!", ports[self.currentPort], result);
                             d.resolve({
                                 port: ports[self.currentPort],
@@ -138,7 +138,7 @@ angular.module('DuckieTorrent.torrent', [])
                  * Execute a torrent client pair request, and give the user 60 seconds to respond.
                  */
                 pair: function() {
-                    return self.jsonp('pair', {}, {
+                    return jsonp('pair', {}, {
                         timeout: 60000
                     });
                 },
