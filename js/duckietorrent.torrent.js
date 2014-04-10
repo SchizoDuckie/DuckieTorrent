@@ -478,6 +478,11 @@ angular.module('DuckieTorrent.torrent', [])
             console.log("Add stash!", data);
         },
 
+        addStashMethods: function(data) {
+            console.log("Add stash methods!", data);
+        },
+
+
         addRssMethods: function(data) {
             console.log("Add RSS Methods: ", data);
         },
