@@ -327,7 +327,8 @@ angular.module('DuckieTorrent.torrent', [])
                 Pair: function() {
                     return methods.pair().then(function(result) {
                         console.log("Received auth token!", result);
-                        localStorage.setItem('utorrent.token', result); //.pairing_key); // for 3.4, still broken.
+                        var key = typeof result == 'object' ? result.pairing_key : result; // switch between 3.3.x and 3.4.1 build 31206 pairing method
+                        localStorage.setItem('utorrent.token', key);
                         self.authToken = result; // .pairing_key;
                     }, function(err) {
                         console.error("Eror pairing!", err);
@@ -350,6 +351,9 @@ angular.module('DuckieTorrent.torrent', [])
                             if (self.isPolling) setTimeout(methods.Update, data && data.length == 0 ? 3000 : 0); // burst when more data comes in, delay when things ease up.
                         });
                     }
+                },
+                isConnected: function() {
+                    return self.connected;
                 }
 
             };
@@ -475,6 +479,8 @@ angular.module('DuckieTorrent.torrent', [])
                 136: 'stopped',
                 137: 'started',
                 152: 'Error: Files missing, please recheck',
+                198: 'Connecting to peers',
+                200: 'started',
                 201: 'downloading',
                 233: 'paused'
             }
@@ -547,6 +553,11 @@ angular.module('DuckieTorrent.torrent', [])
                 service.getNameFunc = $parse('properties.all.name');
             }
             return (service.getNameFunc(torrent))
+        },
+
+        removeTorrent: function(torrent) {
+            this.torrents[torrent.hash] = null;
+            delete this.torrents[torrent.hash];
         },
 
         addEvent: function(torrent) {
@@ -713,15 +724,26 @@ angular.module('DuckieTorrent.torrent', [])
             return $iAttrs.templateUrl || "templates/torrentRemoteControl.html"
         },
         link: function($scope, $attr) {
+            // if the connected info hash changes, remove the old event and start observing the new one.
+            $scope.$watch('infoHash', function(newVal, oldVal) {
+                if (newVal == oldVal) return;
+                $rootScope.$$listeners['torrent:update:' + oldVal] = []; // no $rootScope.$off?
+                $scope.infoHash = newVal;
+                observeTorrent(newVal);
+            });
 
-            uTorrent.AutoConnect().then(function(remote) {
-
+            function observeTorrent(infoHash) {
                 $rootScope.$on('torrent:update:' + $scope.infoHash, function(evt, data) {
                     $scope.torrent = data;
+                    // if ($scope.$root.getSetting('torrenting.autostop') && $scope.torrent.isStarted() && $scope.torrent.getProgress() == 100) {
+                       // console.log('Torrent finished. Auto-stopping', $scope.torrent);
+                       // $scope.torrent.stop();
+                    //}
                 });
                 $scope.torrent = TorrentRemote.getByHash($scope.infoHash);
-
-                console.log("Connected to utorrent!", $scope.infoHash, $scope.torrent);
+            }
+            uTorrent.AutoConnect().then(function(remote) {
+                observeTorrent($scope.infoHash);
             });
 
             $scope.isFormatSupported = function(file) {
