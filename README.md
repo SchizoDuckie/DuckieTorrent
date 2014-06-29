@@ -18,10 +18,10 @@ Features:
 * Allow streaming via html5 <video>
 * Launch files via native player
 * Start / Stop / Add / Remove torrents
+* Updates of torrent progress while downloading
 
 Future features:
 * Set uTorrent configs
-* Updates of progress while downloading
 
 Screenshot
 ==========
@@ -30,3 +30,7 @@ Screenshot
 Live Demo
 =========
 http://schizoduckie.github.io/DuckieTorrent/
+
+DuckieTorrent is used as a part of DuckieTV
+===========================================
+http://schizoduckie.github.io/DuckieTV/
