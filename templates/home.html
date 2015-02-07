@@ -10,11 +10,7 @@
         <strong>You need at least utorrent v3.3 for this to work! </strong>
         </div>
 
-        <button ng-click="Scan()">Scan for a listening torrent client</button>
-    		<button ng-click="Pair()" ng-if="!authToken">Pair on found torrent client</button>
-    		<button ng-click="Connect()" ng-if="authToken">Connect to uTorrent with auth token: {{authToken}}</button>
-        <button ng-if="session && !polling" ng-click="togglePolling();">Connect to uTorrent</button>
-      <button ng-if="session && polling" ng-click="togglePolling();">Disconnect from uTorrent</button>
+       <button ng-click="Pair()">Connect to a local uTorrent</button>
         <ul class="status">
           <li ng-repeat="status in statusLog">{{status}}</li>
         </ul>
